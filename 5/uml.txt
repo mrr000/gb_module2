@@ -1,0 +1,94 @@
+@startuml PDFExporter
+
+interface StyledDocumentGenerateInterface {
+    + generate(StyledDocumentDataInterface $data): StyledDocumentGenerateInterface
+    + setOptions(Array options): StyledDocumentGenerateInterface
+    + getFile(): binary
+}
+
+interface StyledDocumentDataInterface {
+    + getStyle(): StyleDto
+    + getRows(): array
+    + getCols(): array
+}
+
+class PDFGenerator {
+    - generator: PDFLib
+
+    + generate(StyledDocumentDataInterface $data): StyledDocumentGenerateInterface
+    + setOptions(Array options): StyledDocumentGenerateInterface
+    + getFile(): binary
+}
+
+class PDFLib {
+
+}
+
+
+StyledDocumentGenerateInterface <|.. PDFGenerator
+PDFGenerator *.. PDFLib
+
+@enduml
+
+@startuml ProjectManagerEntity
+
+class UnitOfMeasure {
+    name: String
+}
+class WorkType {
+    name: String
+    price: Double
+}
+class Project {
+    id: Integer
+    name: String
+    comment: String
+    workStart: DateTime
+    workEnd: DateTime
+    isDone: Boolean
+    customer: ProjectCustomer
+    objects: ProjectObject[]
+    workLists: WorkList[]
+}
+class ProjectObject {
+    name: String
+    comment: String
+    address: String
+    area: Double
+}
+class ProjectCustomer {
+    name: String
+    contacts: ProjectCustomerContacts[]
+}
+class ProjectCustomerContacts {
+    type: String
+    value: String
+    isMain: Boolean
+}
+
+class WorkList {
+    comment: String
+    isConfirmedByCustomer: Boolean
+    isConfirmedByMaster: Boolean
+    workStart: DateTime
+    workEnd: DateTime
+    workListPositions: WorkListPosition[]
+    object: ?ProjectObject
+}
+
+class WorkListPosition {
+    workType: WorkType
+    unitOfMeasure: UnitOfMeasure
+    price: Double
+    amount: Double
+}
+
+Project o-- ProjectCustomer
+Project *-- ProjectObject : 1..*
+Project *-- WorkList : 1..*
+ProjectCustomer *.. ProjectCustomerContacts : 1..*
+WorkList *.. WorkListPosition : 1..*
+WorkList o-- UnitOfMeasure
+WorkList o-- WorkType
+WorkList o.. ProjectObject
+@enduml
