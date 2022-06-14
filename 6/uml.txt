@@ -1,0 +1,34 @@
+@startuml SequencePDF
+
+actor       Заказчик as customer
+actor       Исполнитель as master
+
+customer->master: Словестное\nописание\nзаказа
+master->Проект: Создание\nпроекта
+master->Смета: Создание
+master->Смета: Экспорт
+Смета->PDF
+master<-PDF: Скачивание
+master -> customer: Стилизованный \nPDF\nсписка работ
+
+@enduml
+
+@startuml SequenceOnline
+
+actor       Заказчик as customer
+actor       Исполнитель as master
+
+customer->master: Словестное\nописание\nзаказа
+master->Проект: Создание\nпроекта
+master->Смета: Создание
+master->Смета: Создать публичную ссылку
+master->Смета: Отправить публичную ссылку
+Смета->Рассылка: Добавление
+Рассылка->customer: Получение оповещения и ссылки
+customer->Смета: Комментрирование
+master->Смета: Корректировка
+Смета->Рассылка: Добавление
+Рассылка->customer: Получение оповещения и ссылки
+customer->Смета: Подтверждение
+
+@enduml
